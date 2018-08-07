@@ -18,15 +18,11 @@
   <maintainer email="tim.uebelhoer@outlook.de">Tim Übelhör</maintainer>
   <license>MIT</license>
 
-  <buildtool_depend>ament_cmake</buildtool_depend>
   <build_depend>gl3w</build_depend>
   <depend>OpenGL</depend>
   <depend>glfw</depend>
   <depend>assimp</depend>
   <depend>glm</depend>
-  <test_depend>ament_cmake_gtest</test_depend>
-  <test_depend>ament_lint_auto</test_depend>
-  <test_depend>ament_lint_common</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

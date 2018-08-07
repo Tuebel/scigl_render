@@ -37,12 +37,10 @@ set(LIB_SRCS
   src/scene/model.cpp
   src/shader/depth_shader.cpp
   src/shader/single_texture_shader.cpp
-  src/shader/shader.cpp
-)
+  src/shader/shader.cpp)
 
 set(EXAMPLE_SRCS
-  src/example/example_render.cpp
-)
+  src/example/example_render.cpp)
 
 # Build library
 add_library(scigl_render
@@ -67,7 +65,6 @@ target_link_libraries(viewer_app
 install(
   DIRECTORY include/scigl_render
   DESTINATION include)
-
 ## Install executable and lib
 install(TARGETS
   scigl_render
