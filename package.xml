@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="2">
+  <name>scigl_render</name>
+  <version>0.1.0</version>
+  <description>
+  Library to simplify rendering objects via OpenGL. The intendet use case
+  is scientific (e.g. probabalistic filtering). It is not supposed to be a 
+  full rendering engine and the usage is relatively low level. The
+  rendering behaviour can be changed by  supplying your own shaders.
+  A key feature is the inclusion of calibrated cameras to simulate a real
+  camera. Besides rendering a scene to the screen, a use case is rendering
+  several object poses offscreen to an offscreen buffer and reading it back into
+  CPU memory via pixel buffer objects.
+  The library supports loading from many common 3D model file formats (via 
+  assimp).
+  </description>
+  <maintainer email="tim.uebelhoer@outlook.de">Tim Übelhör</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <build_depend>gl3w</build_depend>
+  <depend>OpenGL</depend>
+  <depend>glfw</depend>
+  <depend>assimp</depend>
+  <depend>glm</depend>
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
