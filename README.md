@@ -2,7 +2,7 @@
 Library to simplify rendering objects via OpenGL. The intendet use case is scientific (e.g. probabalistic filtering).
 
 # dependencies
-This package is built with colcon / ament_cmake as it will be used in ROS2.
+This package is built with cmake but comes with a package.xml for [colcon](https://colcon.readthedocs.io/en/latest/index.html) it will be used in ROS2.
 It requires the following packages:
 
 - gl3w (https://github.com/skaslev/gl3w)
