@@ -9,8 +9,6 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# ament as build tool
-find_package(ament_cmake REQUIRED)
 # OpenGL
 cmake_policy(SET CMP0072 NEW)
 find_package(OpenGL REQUIRED)
@@ -77,21 +75,3 @@ install(TARGETS
   ARCHIVE DESTINATION lib/${PROJECT_NAME}
   LIBRARY DESTINATION lib/${PROJECT_NAME}
   RUNTIME DESTINATION lib/${PROJECT_NAME})
-
-if(BUILD_TESTING)
-  # Unit testing via googletest
-  find_package(ament_cmake_gtest REQUIRED)
-  # ament_add_gtest(test_name path/to/source.cpp)
-
-  find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # remove the line when a copyright and license is present in all source files
-  set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # remove the line when this package is a git repo
-  set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
-endif()
-
-# Always last in ament!
-ament_package()
