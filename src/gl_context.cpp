@@ -1,5 +1,5 @@
 #include <gl3w/GL/gl3w.h>
-#include <scigl_render/gl_context.h>
+#include <scigl_render/gl_context.hpp>
 #include <stdexcept>
 #include <iostream>
 

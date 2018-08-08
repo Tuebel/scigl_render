@@ -1,4 +1,4 @@
-#include <scigl_render/shader/shader.h>
+#include <scigl_render/shader/shader.hpp>
 #include <stdexcept>
 
 namespace scigl_render

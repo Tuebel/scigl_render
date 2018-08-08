@@ -1,5 +1,5 @@
 #pragma once
-#include <scigl_render/shader/shader.h>
+#include <scigl_render/shader/shader.hpp>
 #include <glm/vec3.hpp>
 
 namespace scigl_render

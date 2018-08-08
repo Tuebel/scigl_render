@@ -1,4 +1,4 @@
-#include <scigl_render/render/frame_buffer.h>
+#include <scigl_render/render/frame_buffer.hpp>
 #include <iostream>
 #include <stdexcept>
 

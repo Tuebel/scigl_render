@@ -1,4 +1,4 @@
-#include <scigl_render/shader/depth_shader.h>
+#include <scigl_render/shader/depth_shader.hpp>
 
 namespace scigl_render
 {

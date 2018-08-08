@@ -1,18 +1,14 @@
 #pragma once
-#include <scigl_render/shader/shader.h>
+#include <scigl_render/shader/shader.hpp>
 
 namespace scigl_render
 {
 /*!
-Returns the source code for shaders that render the absolute depth
-of a pixel.
+This shader renders using a single texture
 */
-class DepthShader
+class SingleTextureShader
 {
 public:
-  /*!
-  Creates the shader program from the sources.
-  */
   static Shader create_shader();
 
 private:
@@ -21,8 +17,7 @@ private:
   */
   static std::string get_vertex_source();
   /*!
-  Returns the geometry shader source code. Since this shader is optional,
-   returning  an empty string is valid.
+  Returns the geometry shader source code.
   */
   static std::string get_geometry_source();
   /*!

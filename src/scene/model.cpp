@@ -1,4 +1,4 @@
-#include <scigl_render/scene/model.h>
+#include <scigl_render/scene/model.hpp>
 #include <fstream>
 #include <sstream>
 #include <iostream>

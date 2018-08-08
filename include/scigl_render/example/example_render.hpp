@@ -1,10 +1,10 @@
 #pragma once
-#include <scigl_render/gl_context.h>
-#include <scigl_render/render/offscreen_render.h>
-#include <scigl_render/render/texture_fullscreen_render.h>
-#include <scigl_render/scene/camera.h>
-#include <scigl_render/scene/diffuse_light.h>
-#include <scigl_render/scene/model.h>
+#include <scigl_render/gl_context.hpp>
+#include <scigl_render/render/offscreen_render.hpp>
+#include <scigl_render/render/texture_fullscreen_render.hpp>
+#include <scigl_render/scene/camera.hpp>
+#include <scigl_render/scene/diffuse_light.hpp>
+#include <scigl_render/scene/model.hpp>
 #include <memory>
 #include <string>
 #include <vector>

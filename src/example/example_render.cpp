@@ -1,7 +1,7 @@
-#include <scigl_render/example/check_gl_error.h>
-#include <scigl_render/example/example_render.h>
-#include <scigl_render/shader/single_texture_shader.h>
-#include <scigl_render/render/offscreen_render.h>
+#include <scigl_render/example/check_gl_error.hpp>
+#include <scigl_render/example/example_render.hpp>
+#include <scigl_render/shader/single_texture_shader.hpp>
+#include <scigl_render/render/offscreen_render.hpp>
 
 namespace scigl_render
 {

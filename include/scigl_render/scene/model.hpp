@@ -1,7 +1,7 @@
 #pragma once
-#include <scigl_render/shader/shader.h>
-#include <scigl_render/scene/mesh.h>
-#include <scigl_render/scene/pose.h>
+#include <scigl_render/shader/shader.hpp>
+#include <scigl_render/scene/mesh.hpp>
+#include <scigl_render/scene/pose.hpp>
 #include <assimp/scene.h>
 
 namespace scigl_render

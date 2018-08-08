@@ -1,4 +1,4 @@
-#include <scigl_render/render/texture_fullscreen_render.h>
+#include <scigl_render/render/texture_fullscreen_render.hpp>
 #include <iostream>
 
 namespace scigl_render

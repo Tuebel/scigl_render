@@ -1,6 +1,6 @@
 #pragma once
 #include <gl3w/GL/gl3w.h>
-#include <scigl_render/shader/shader.h>
+#include <scigl_render/shader/shader.hpp>
 
 namespace scigl_render
 {

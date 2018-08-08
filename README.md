@@ -26,3 +26,10 @@ https://www.khronos.org/opengl/wiki/Texture_Storage for more information).
 
 I also built it with CMake. Since the package searches for the ament_cmake
 package I suppose you need to have at least ament_cmake installed.
+
+# Notice
+
+If you want to learn more about the OpenGL implementation, please visit Joey de
+Vries website https://learnopengl.com/ and his twitter page 
+https://twitter.com/JoeyDeVriez. Thanks to his awesome resources I managed to
+write this library in a bit more than a week.

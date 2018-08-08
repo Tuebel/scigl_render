@@ -1,5 +1,5 @@
 #include <gl3w/GL/gl3w.h>
-#include <scigl_render/render/offscreen_render.h>
+#include <scigl_render/render/offscreen_render.hpp>
 #include <stdexcept>
 
 namespace scigl_render

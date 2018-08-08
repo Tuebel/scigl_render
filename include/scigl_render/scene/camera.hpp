@@ -1,8 +1,8 @@
 #pragma once
 #include <gl3w/GL/gl3w.h>
-#include <scigl_render/shader/shader.h>
-#include <scigl_render/scene/camera_intrinsics.h>
-#include <scigl_render/scene/pose.h>
+#include <scigl_render/shader/shader.hpp>
+#include <scigl_render/scene/camera_intrinsics.hpp>
+#include <scigl_render/scene/pose.hpp>
 #include <vector>
 
 namespace scigl_render

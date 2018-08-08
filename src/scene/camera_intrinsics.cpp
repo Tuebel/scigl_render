@@ -1,4 +1,4 @@
-#include <scigl_render/scene/camera_intrinsics.h>
+#include <scigl_render/scene/camera_intrinsics.hpp>
 
 namespace scigl_render
 {

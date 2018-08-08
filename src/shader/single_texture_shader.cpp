@@ -1,4 +1,4 @@
-#include <scigl_render/shader/single_texture_shader.h>
+#include <scigl_render/shader/single_texture_shader.hpp>
 
 namespace scigl_render
 {

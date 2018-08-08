@@ -1,8 +1,8 @@
 #pragma once
-#include <scigl_render/shader/shader.h>
-#include <scigl_render/scene/diffuse_texture.h>
-#include <scigl_render/scene/vertex.h>
-#include <scigl_render/scene/material.h>
+#include <scigl_render/shader/shader.hpp>
+#include <scigl_render/scene/diffuse_texture.hpp>
+#include <scigl_render/scene/vertex.hpp>
+#include <scigl_render/scene/material.hpp>
 #include <vector>
 #include <assimp/scene.h>
 

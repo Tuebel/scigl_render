@@ -51,5 +51,6 @@
     "algorithm": "cpp",
     "cerrno": "cpp",
     "memory": "cpp"
-  }
+  },
+  "C_Cpp.configurationWarnings": "Disabled"
 }

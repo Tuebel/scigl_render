@@ -3,10 +3,10 @@
 #include <glm/glm.hpp>
 #include <stdexcept>
 #include <iostream>
-#include <scigl_render/gl_context.h>
-#include <scigl_render/example/example_render.h>
-#include <scigl_render/scene/camera.h>
-#include <scigl_render/scene/diffuse_light.h>
+#include <scigl_render/gl_context.hpp>
+#include <scigl_render/example/example_render.hpp>
+#include <scigl_render/scene/camera.hpp>
+#include <scigl_render/scene/diffuse_light.hpp>
 
 // forward declare callbacks
 // get mouse and keyboard inputs

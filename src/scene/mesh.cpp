@@ -1,4 +1,4 @@
-#include <scigl_render/scene/mesh.h>
+#include <scigl_render/scene/mesh.hpp>
 #define STB_IMAGE_IMPLEMENTATION
 #include <scigl_render/scene/stb_image.h>
 #include <iostream>

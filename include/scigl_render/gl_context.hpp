@@ -11,7 +11,7 @@ class GLContext
 {
 public:
   GLContext(bool visible, int width, int height);
-  GLContext(const GLContext&) = delete;
+  GLContext(const GLContext &) = delete;
   ~GLContext();
 
   /*!
