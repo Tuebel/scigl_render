@@ -1,4 +1,4 @@
-#include <scigl_render/example/check_gl_error.hpp>
+#include <scigl_render/check_gl_error.hpp>
 #include <scigl_render/example/example_render.hpp>
 #include <scigl_render/shader/single_texture_shader.hpp>
 #include <scigl_render/render/offscreen_render.hpp>
@@ -24,9 +24,7 @@ ExampleRender::ExampleRender(std::shared_ptr<GLContext> context,
   buffer_size = gl_context->get_width() * gl_context->get_height() *
                 4 * sizeof(float);
   offscreen_render = std::make_unique<OffscreenRender>(
-      framebuffer, buffer_size,
-      std::bind(&ExampleRender::process_data,
-                this, std::placeholders::_1));
+      framebuffer, buffer_size);
   // models are expected as vector
   Model model(model_path);
   models.push_back(model);
@@ -41,13 +39,17 @@ ExampleRender::ExampleRender(std::shared_ptr<GLContext> context,
 
 void ExampleRender::next_frame(const Camera &camera)
 {
+  using namespace std::placeholders;
   check_gl_error("next frame begin");
   glEnable(GL_DEPTH_TEST);
-  offscreen_render->next_frame(models, camera, light, scene_shader);
+  offscreen_render->start_render(models, camera, light, scene_shader);
+  offscreen_render->start_read();
+  offscreen_render->read_data(std::bind(&ExampleRender::process_data,
+                this, _1));
   check_gl_error("next frame end");
 }
 
-void ExampleRender::process_data(void *data)
+void ExampleRender::process_data(const void *data)
 {
   check_gl_error("process data begin");
   // Now draw framebuffer to the default window framebuffer

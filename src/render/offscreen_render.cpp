@@ -5,9 +5,8 @@
 namespace scigl_render
 {
 OffscreenRender::OffscreenRender(std::shared_ptr<FrameBuffer> framebuffer,
-                                 size_t buffer_size,
-                                 ProcessDataCallback callback)
-    : fbo(framebuffer), process_data(callback)
+                                 size_t buffer_size)
+    : fbo(framebuffer)
 {
   glGenBuffers(pbos.size(), pbos.data());
   for (size_t i = 0; i < pbos.size(); i++)
@@ -18,10 +17,10 @@ OffscreenRender::OffscreenRender(std::shared_ptr<FrameBuffer> framebuffer,
   glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 }
 
-void OffscreenRender::next_frame(const std::vector<Model> &models,
-                                 const Camera &camera,
-                                 const DiffuseLight &light,
-                                 const Shader &shader)
+void OffscreenRender::start_render(const std::vector<Model> &models,
+                                   const Camera &camera,
+                                   const DiffuseLight &light,
+                                   const Shader &shader)
 {
   // Render the scene
   fbo->clear();
@@ -33,31 +32,31 @@ void OffscreenRender::next_frame(const std::vector<Model> &models,
   {
     model.draw(shader);
   }
-  if (!first_frame)
-  {
-    // Start reading into the fbo->pbo pbo
-    glReadBuffer(GL_COLOR_ATTACHMENT0);
-    glBindBuffer(GL_PIXEL_PACK_BUFFER, pbos[pbo_fbo_index]);
-    glReadPixels(0, 0, fbo->get_width(), fbo->get_height(), fbo->get_format(),
-                 fbo->get_type(), nullptr);
-    // Map the memory that should be available now and process it!
-    // Without processing no performance gain is expected.
-    glBindBuffer(GL_PIXEL_PACK_BUFFER, pbos[pbo_map_index]);
-    void *data = glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
-    if (data)
-    {
-      fbo->deactivate();
-      process_data(data);
-    }
-    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-  }
-  else
-  {
-    first_frame = false;
-  }
-  swap_indices();
   fbo->deactivate();
+}
+
+void OffscreenRender::start_read()
+{
+  swap_indices();
+  fbo->activate();
+  glReadBuffer(GL_COLOR_ATTACHMENT0);
+  glBindBuffer(GL_PIXEL_PACK_BUFFER, pbos[pbo_fbo_index]);
+  glReadPixels(0, 0, fbo->get_width(), fbo->get_height(), fbo->get_format(),
+               fbo->get_type(), nullptr);
   glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+  fbo->deactivate();
+}
+
+void OffscreenRender::read_data(
+    const ProcessDataCallback &process_data)
+{
+  glBindBuffer(GL_PIXEL_PACK_BUFFER, pbos[pbo_map_index]);
+  void *data = glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
+  if (data)
+  {
+    process_data(data);
+  }
+  glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
 }
 
 void OffscreenRender::swap_indices()

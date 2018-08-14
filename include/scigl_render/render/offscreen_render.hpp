@@ -13,14 +13,14 @@ namespace scigl_render
 /*!
 The intedented use case is rendering data offscreen that needs to be processed.
 The class renders to a framebuffer object and uses PBOs asynchronous data
-transfer and processing. This means the performance is only increased if
-there is any time intensive processing in the callback.
+transfer and processing. This means the frame beeing read is alway one step
+behind the current
 */
 class OffscreenRender
 {
 public:
   /*! Defines a callback when new data has been mapped to the CPU memory */
-  using ProcessDataCallback = std::function<void(void *)>;
+  using ProcessDataCallback = std::function<void(const void *)>;
 
   /*!
   Renders the scene off-screen and calculates the depth values.
@@ -28,23 +28,34 @@ public:
   \param framebuffer is used to render to. 
   \param buffer_size full sizein bytes of the image to read (width * height * 
   color_channel_count * sizeof(type)). Must match the the framebuffers content.
-  \param callback will be called on next_frame if new data has been mapped
-  to the CPU memory. This gives the user the possibility to do calculations or
-  copy the data, while the next frame is beeing read.
   */
-  OffscreenRender(std::shared_ptr<FrameBuffer> framebuffer, size_t buffer_size,
-                  ProcessDataCallback callback);
+  OffscreenRender(std::shared_ptr<FrameBuffer> framebuffer, size_t buffer_size);
 
   /*!
-  Continues rendering to the next frame. If data from the previous frame is
-  available the ProcessDataCallback is invoked.
+  Starts to render this scene to the framebuffer. This operation is 
+  asynchronous.
   \models are rendered in its current pose into one frame. The result of this
   render will be returned after the nex call of this function.
   \param camera the current camera extrinsic and intrinsic parameters
   \param shader the shader that is used to render the scene
   */
-  void next_frame(const std::vector<Model> &models, const Camera &camera,
-                  const DiffuseLight &light, const Shader &shader);
+  void start_render(const std::vector<Model> &models, const Camera &camera,
+                    const DiffuseLight &light, const Shader &shader);
+
+  /*!
+  Swaps the PBOs so the one from the last call to start_read can be evaluated by
+  read_data. Starts reading from the FBO to the other PBO.
+  */
+  void start_read();
+
+  /*!
+  Synchronously reads the data from the previous start_read call. It is 
+  important to execute the calculations in the process_data callback to gain
+  performance.
+  \param process_data the callback function will be executed if data has been
+  read.
+  */
+  void read_data(const ProcessDataCallback &process_data);
 
 private:
   // Render to this
@@ -55,10 +66,6 @@ private:
   int pbo_fbo_index = 0;
   // transfer from pbo to CPU memory
   int pbo_map_index = 1;
-  // On the first frame there is no previous data available
-  bool first_frame = true;
-  // Call this if new data has been mapped
-  ProcessDataCallback process_data;
 
   /*! Swap the indices for fbo->pbo and mapping */
   void swap_indices();

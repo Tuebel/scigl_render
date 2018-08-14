@@ -57,6 +57,6 @@ private:
   /*!
   Callback for the offscreen render
   */
-  void process_data(void *data);
+  void process_data(const void *data);
 };
 } // namespace scigl_render
