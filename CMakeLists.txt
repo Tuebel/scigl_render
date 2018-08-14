@@ -9,23 +9,16 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# OpenGL
+# find packages
 cmake_policy(SET CMP0072 NEW)
 find_package(OpenGL REQUIRED)
-# OpenGL function loader
 find_package(gl3w REQUIRED)
-# OpenGL context provider
 find_package(glfw3 3.2 REQUIRED)
-# Asset loading
 find_package(assimp REQUIRED)
-# OpenGL math
 find_package(glm REQUIRED)
 
-# Include headers
-include_directories(include)
-
-# Source files for libray
-set(LIB_SRCS
+# library
+add_library(scigl_render
   src/gl_context.cpp
   src/render/frame_buffer.cpp
   src/render/offscreen_render.cpp
@@ -38,37 +31,31 @@ set(LIB_SRCS
   src/shader/depth_shader.cpp
   src/shader/single_texture_shader.cpp
   src/shader/shader.cpp)
-
-set(EXAMPLE_SRCS
-  src/example/example_render.cpp)
-
-# Build library
-add_library(scigl_render
-  ${LIB_SRCS})
-target_link_libraries(scigl_render
+target_include_directories(scigl_render PUBLIC
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_link_libraries(scigl_render PUBLIC
   gl3w
   glfw
   assimp
   glm)
 
-# Example application
-add_library(scigl_render_example
-  ${EXAMPLE_SRCS})
-target_link_libraries(scigl_render_example
-  scigl_render)
+# example app
 add_executable(viewer_app
-  src/example/viewer_app.cpp)
+  src/example/viewer_app.cpp
+  src/example/example_render.cpp)
 target_link_libraries(viewer_app
-  scigl_render_example)
+  scigl_render)
 
-## Install include dir
-install(
-  DIRECTORY include/scigl_render
-  DESTINATION include)
-## Install executable and lib
+# installation of library
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION include)
+install(FILES scigl_render-config.cmake DESTINATION lib/scigl_render/)
+install(TARGETS scigl_render DESTINATION lib EXPORT scigl_render_targets)
+install(EXPORT scigl_render_targets DESTINATION lib/scigl_render)
+export(TARGETS scigl_render FILE scigl_render_exports.cmake)
+# installation of viewer app
 install(TARGETS
-  scigl_render
   viewer_app
-  ARCHIVE DESTINATION lib/${PROJECT_NAME}
-  LIBRARY DESTINATION lib/${PROJECT_NAME}
-  RUNTIME DESTINATION lib/${PROJECT_NAME})
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
