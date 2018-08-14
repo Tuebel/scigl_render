@@ -23,7 +23,6 @@ add_library(scigl_render
   src/render/frame_buffer.cpp
   src/render/offscreen_render.cpp
   src/render/texture_fullscreen_render.cpp
-  src/scene/camera_intrinsics.cpp
   src/scene/camera.cpp
   src/scene/diffuse_light.cpp
   src/scene/mesh.cpp  
@@ -41,10 +40,10 @@ target_link_libraries(scigl_render PUBLIC
   glm)
 
 # example app
-add_executable(viewer_app
-  src/example/viewer_app.cpp
+add_executable(scigl_viewer
+  src/example/scigl_viewer.cpp
   src/example/example_render.cpp)
-target_link_libraries(viewer_app
+target_link_libraries(scigl_viewer
   scigl_render)
 
 # installation of library
@@ -53,9 +52,9 @@ install(FILES scigl_render-config.cmake DESTINATION lib/scigl_render)
 install(TARGETS scigl_render DESTINATION lib EXPORT scigl_render_targets)
 install(EXPORT scigl_render_targets DESTINATION lib/scigl_render)
 export(TARGETS scigl_render FILE scigl_render_exports.cmake)
-# installation of viewer app
+# installation of scigl_viewer
 install(TARGETS
-  viewer_app
+  scigl_viewer
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)

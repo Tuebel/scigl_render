@@ -35,7 +35,8 @@ int main(int argc, char *argv[])
     using namespace scigl_render;
     if (argc < 2)
     {
-        throw std::runtime_error("No model file provided. Run as */viewer_app <model_filename>!");
+        throw std::runtime_error(
+            "No model file provided. Run as */scigl_viwer <model_filename>!");
     }
     // Intrinsics of my shitty webcam
     CameraIntrinsics camera_intrinsics;

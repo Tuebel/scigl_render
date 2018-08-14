@@ -7,17 +7,15 @@ namespace scigl_render
 Contains all the information to mimic a real camera as virtual camera in OpenGL.
 Based on:
 http://ksimek.github.io/2013/06/03/calibrated_cameras_in_opengl/
+
+Coordinate convention for the calibration differ, this class uses the OpenCV
+camera model:
+OpenCV: https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html
+Origin right-handed, in upper left corner, x points right, y down.
 */
 class CameraIntrinsics
 {
 public:
-  /*!
-  Coordinate convention for the calibration differ, this class uses the OpenCV
-  camera model:
-  OpenCV: https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html
-  Origin right-handed, in upper left corner, x points right, y down.
-  */
-
   /*! The width of the image in pixels */
   int width = 640;
   /*! The height of the image in pixels*/
@@ -36,12 +34,5 @@ public:
   float near = 0.1;
   /*! The far plane for OpenGL */
   float far = 15;
-
-  /*!
-  Get the projection matrix for the given camera intrinsics.
-  \return a projection matrix calculated that transforms from view to clipping
-  space
-  */
-  glm::mat4 projection_matrix() const;
 };
 } // namespace scigl_render

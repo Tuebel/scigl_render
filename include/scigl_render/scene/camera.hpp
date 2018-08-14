@@ -32,7 +32,14 @@ public:
   glm::mat4 get_view_matrix() const;
 
   /*!
-  The projection matrix based on the intrinsics.
+  Get the projection matrix for the given camera intrinsics.
+  \return a projection matrix calculated that transforms from view to clipping
+  space
+  */
+  static glm::mat4 get_projection_matrix(const CameraIntrinsics &intrinsics);
+
+  /*!
+  The projection matrix based on the intrinsics configured on construction.
   */
   glm::mat4 get_projection_matrix() const;
 
