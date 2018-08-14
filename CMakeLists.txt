@@ -49,7 +49,7 @@ target_link_libraries(viewer_app
 
 # installation of library
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION include)
-install(FILES scigl_render-config.cmake DESTINATION lib/scigl_render/)
+install(FILES scigl_render-config.cmake DESTINATION lib/scigl_render)
 install(TARGETS scigl_render DESTINATION lib EXPORT scigl_render_targets)
 install(EXPORT scigl_render_targets DESTINATION lib/scigl_render)
 export(TARGETS scigl_render FILE scigl_render_exports.cmake)
