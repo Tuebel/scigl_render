@@ -5,6 +5,7 @@
 #include <scigl_render/scene/camera.hpp>
 #include <scigl_render/scene/diffuse_light.hpp>
 #include <scigl_render/scene/model.hpp>
+#include <scigl_render/shader/shader.hpp>
 #include <memory>
 #include <string>
 #include <vector>
@@ -24,10 +25,17 @@ public:
   /*!
   Configures the rendering environment and loads the models.
   \param context the environment to configure
+  \param shader how to render the scene
+  \param tex_format format parameter of glTexImage2D
+  \param tex_type type parameter of glTexImage2D
+  \param tex_internal_format internal_format parameter of glTexImage2D
   \param model_path the model to be rendered
+  \param light how the light should be parametrized in the scene
   */
   ExampleRender(std::shared_ptr<GLContext> context,
-                const std::string &model_path, DiffuseLight light);
+                Shader shader, GLenum tex_format, GLenum tex_type,
+                GLint tex_internal_format, const std::string &model_path,
+                DiffuseLight light);
 
   /*!
   Continues to render the next frame.
@@ -35,9 +43,8 @@ public:
   void next_frame(const Camera &camera);
 
 private:
-  const static GLenum FORMAT;
-  const static GLenum TYPE;
-  const static GLint INTERNAL_FORMAT;
+  GLenum texture_format;
+  GLenum texture_type;
 
   std::shared_ptr<GLContext> gl_context;
   DiffuseLight light;

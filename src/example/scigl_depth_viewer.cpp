@@ -7,7 +7,7 @@
 #include <scigl_render/example/example_render.hpp>
 #include <scigl_render/scene/camera.hpp>
 #include <scigl_render/scene/diffuse_light.hpp>
-#include <scigl_render/shader/single_texture_shader.hpp>
+#include <scigl_render/shader/depth_shader.hpp>
 
 // forward declare callbacks
 // get mouse and keyboard inputs
@@ -59,8 +59,8 @@ int main(int argc, char *argv[])
     // Setup renderer
     std::shared_ptr<GLContext> context =
         std::make_shared<GLContext>(true, WIDTH, HEIGHT);
-    ExampleRender render(context, SingleTextureShader::create_shader(),
-                         GL_RGBA, GL_FLOAT, GL_RGBA32F, argv[1],
+    ExampleRender render(context, DepthShader::create_shader(),
+                         GL_RED, GL_UNSIGNED_SHORT, GL_R16, argv[1],
                          std::move(light));
     // main loop
     while (!glfwWindowShouldClose(context->get_window()))

@@ -12,15 +12,20 @@ namespace scigl_render
 {
 /*!
 The intedented use case is rendering data offscreen that needs to be processed.
-The class renders to a framebuffer object and uses PBOs asynchronous data
-transfer and processing. This means the frame beeing read is alway one step
-behind the current
+Two pixel buffer objects are use like a double buffer: one PBO is filled
+asynchronously with data from the frame buffer while the other one is ready to
+be mapped to the clients memory. Consequently the results of a rendering is
+delayed by one read call. 
 */
 class OffscreenRender
 {
 public:
-  /*! Defines a callback when new data has been mapped to the CPU memory */
-  using ProcessDataCallback = std::function<void(const void *)>;
+  /*!
+  Defines a callback when new data has been mapped to the CPU memory.
+  Advice: avoid copying the data and use it as readonly memory inside the
+  callback to gain the most performance.
+  */
+  using ProcessDataCallback = std::function<void(const void *data)>;
 
   /*!
   Renders the scene off-screen and calculates the depth values.
@@ -43,17 +48,17 @@ public:
                     const DiffuseLight &light, const Shader &shader);
 
   /*!
-  Swaps the PBOs so the one from the last call to start_read can be evaluated by
-  read_data. Starts reading from the FBO to the other PBO.
+  Starts reading from the FBO to the backbuffer PBO.
   */
   void start_read();
 
   /*!
-  Synchronously reads the data from the previous start_read call. It is 
-  important to execute the calculations in the process_data callback to gain
-  performance.
+  Synchronously reads the data from the front buffer (one frame delayed!). After
+  finishing the PBOs are swapped, so the next start_render / read_data call will
+  use the other PBO. It is important to execute the calculations in the 
+  process_data callback to gain performance.
   \param process_data the callback function will be executed if data has been
-  read.
+  read successfully.
   */
   void read_data(const ProcessDataCallback &process_data);
 

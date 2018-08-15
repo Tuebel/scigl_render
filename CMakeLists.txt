@@ -39,12 +39,18 @@ target_link_libraries(scigl_render PUBLIC
   assimp
   glm)
 
-# example app
+# example apps
 add_executable(scigl_viewer
   src/example/scigl_viewer.cpp
   src/example/example_render.cpp)
 target_link_libraries(scigl_viewer
   scigl_render)
+add_executable(scigl_depth_viewer
+  src/example/scigl_depth_viewer.cpp
+  src/example/example_render.cpp)
+target_link_libraries(scigl_depth_viewer
+  scigl_render)
+  
 
 # installation of library
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION include)
@@ -54,7 +60,7 @@ install(EXPORT scigl_render_targets DESTINATION lib/scigl_render)
 export(TARGETS scigl_render FILE scigl_render_exports.cmake)
 # installation of scigl_viewer
 install(TARGETS
-  scigl_viewer
+  scigl_viewer scigl_depth_viewer
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)

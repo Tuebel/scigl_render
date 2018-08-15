@@ -34,7 +34,7 @@ GLContext::GLContext(bool visible, int w, int h) : width(w), height(h)
     throw std::runtime_error("OpenGL 4.2 not supported");
   }
   std::cout << "OpenGL Version: " << glGetString(GL_VERSION)
-            << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION)
+            << " GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION)
             << "\n";
   glViewport(0, 0, width, height);
 }

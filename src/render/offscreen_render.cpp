@@ -12,7 +12,8 @@ OffscreenRender::OffscreenRender(std::shared_ptr<FrameBuffer> framebuffer,
   for (size_t i = 0; i < pbos.size(); i++)
   {
     glBindBuffer(GL_PIXEL_PACK_BUFFER, pbos[i]);
-    glBufferData(GL_PIXEL_PACK_BUFFER, buffer_size, 0, GL_STREAM_READ);
+    // constantly reading new contents
+    glBufferData(GL_PIXEL_PACK_BUFFER, buffer_size, 0, GL_DYNAMIC_READ);
   }
   glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 }
@@ -37,7 +38,6 @@ void OffscreenRender::start_render(const std::vector<Model> &models,
 
 void OffscreenRender::start_read()
 {
-  swap_indices();
   fbo->activate();
   glReadBuffer(GL_COLOR_ATTACHMENT0);
   glBindBuffer(GL_PIXEL_PACK_BUFFER, pbos[pbo_fbo_index]);
@@ -57,6 +57,7 @@ void OffscreenRender::read_data(
     process_data(data);
   }
   glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+  swap_indices();
 }
 
 void OffscreenRender::swap_indices()
