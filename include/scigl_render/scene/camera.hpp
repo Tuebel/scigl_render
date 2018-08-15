@@ -20,9 +20,13 @@ public:
   */
   QuaternionPose pose;
 
-  CameraIntrinsics intrinsics;
-
-  // Constructor with vectors
+  /*!
+  Default constructor. Don't forget to set the intrinsics!
+  */
+  Camera();
+  /*!
+  Constructor with intrinsics
+  */
   Camera(CameraIntrinsics intrinsics);
 
   /*!
@@ -30,13 +34,6 @@ public:
   of the camera transformation.
   */
   glm::mat4 get_view_matrix() const;
-
-  /*!
-  Get the projection matrix for the given camera intrinsics.
-  \return a projection matrix calculated that transforms from view to clipping
-  space
-  */
-  static glm::mat4 get_projection_matrix(const CameraIntrinsics &intrinsics);
 
   /*!
   The projection matrix based on the intrinsics configured on construction.
@@ -49,8 +46,18 @@ public:
   */
   void set_in_shader(const Shader &shader) const;
 
+  CameraIntrinsics get_intrinsics() const;
+  void set_intrinsics(CameraIntrinsics intrinsics);
+
 private:
-  // Intrinsics don't change, save CPU and calculate once in constructor
   glm::mat4 projection_matrix;
+  CameraIntrinsics intrinsics;
+
+  /*!
+  Get the projection matrix for the given camera intrinsics.
+  \return a projection matrix calculated that transforms from view to clipping
+  space
+  */
+  static glm::mat4 calc_projection_matrix(const CameraIntrinsics &intrinsics);
 };
 } // namespace scigl_render

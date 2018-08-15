@@ -45,10 +45,12 @@ int main(int argc, char *argv[])
     camera_intrinsics.height = 480;
     camera_intrinsics.c_x = 411;
     camera_intrinsics.c_y = 310;
-    // camera_intrinsics.c_x = 320;
-    // camera_intrinsics.c_y = 240;
     camera_intrinsics.f_x = 511;
     camera_intrinsics.f_y = 513;
+    // camera_intrinsics.f_x = 1000;
+    // camera_intrinsics.f_y = 500;
+    // camera_intrinsics.c_x = 320;
+    // camera_intrinsics.c_y = 240;
     Camera camera(camera_intrinsics);
     // Test if Cartesian -> Quaternion works
     CartesianPose camera_pose = {glm::vec3(0, 0, 2), glm::vec3(0, 0, 0)};

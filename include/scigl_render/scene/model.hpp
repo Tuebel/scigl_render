@@ -20,6 +20,12 @@ public:
   QuaternionPose pose;
 
   /*!
+  Scale the model for example when using different units. Blender uses meters as
+  default if the model should be rendered in millimeters set scale to 1000.
+  */
+  float scale_factor = 1;
+
+  /*!
   Create a model from the given file by importing it via the assimp library.
   Will throw a runtime_error if it fails.
   \param path to the file of the model (*.obj, *.stl, *.blend, .... Full list

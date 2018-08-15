@@ -3,8 +3,9 @@
 namespace scigl_render
 {
 Camera::Camera(CameraIntrinsics intr)
-    : intrinsics(std::move(intr)),
-      projection_matrix(get_projection_matrix(intrinsics))
+    : projection_matrix(calc_projection_matrix(intr)),
+      intrinsics(std::move(intr))
+
 {
   // start in origin
   pose = {};
@@ -15,7 +16,7 @@ glm::mat4 Camera::get_view_matrix() const
   return pose.passive_transformation();
 }
 
-glm::mat4 Camera::get_projection_matrix(const CameraIntrinsics &intrinsics)
+glm::mat4 Camera::calc_projection_matrix(const CameraIntrinsics &intrinsics)
 {
   // The idea: http://ksimek.github.io/2013/06/03/calibrated_cameras_in_opengl/
   // perspecitve matrix is almost the intrinisc matrix K
@@ -45,6 +46,16 @@ void Camera::set_in_shader(const Shader &shader) const
 {
   shader.setMat4("projection_matrix", get_projection_matrix());
   shader.setMat4("view_matrix", get_view_matrix());
+}
+
+CameraIntrinsics Camera::get_intrinsics() const
+{
+  return intrinsics;
+}
+void Camera::set_intrinsics(CameraIntrinsics intrinsics)
+{
+  projection_matrix = calc_projection_matrix(intrinsics);
+  this->intrinsics = std::move(intrinsics);
 }
 
 } // namespace scigl_render

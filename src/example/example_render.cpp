@@ -30,6 +30,7 @@ ExampleRender::ExampleRender(std::shared_ptr<GLContext> context,
       framebuffer, buffer_size);
   // models are expected as vector
   Model model(model_path);
+  model.scale_factor = 1;
   models.push_back(model);
   // Create intermediate texture to render on screen after reading pixels
   glGenTextures(1, &quad_texture);

@@ -48,8 +48,14 @@ void Model::process_node(const aiNode *node, const aiScene *scene)
 
 void Model::draw(const Shader &shader) const
 {
+  // Scale the model
+  glm::mat4x4 scale_mat(0);
+  scale_mat[0][0] = scale_factor;
+  scale_mat[1][1] = scale_factor;
+  scale_mat[2][2] = scale_factor;
+  scale_mat[3][3] = 1;
   // Set model transformation in shader
-  shader.setMat4("model_matrix", pose.active_transformation());
+  shader.setMat4("model_matrix", scale_mat * pose.active_transformation());
   for (size_t i = 0; i < meshes.size(); i++)
   {
     meshes[i].draw(shader);
