@@ -62,7 +62,10 @@ public:
   */
   void read_data(const ProcessDataCallback &process_data);
 
+  size_t get_buffer_size() const;
+
 private:
+  size_t buffer_size;
   // Render to this
   std::shared_ptr<FrameBuffer> fbo;
   // Two pbos one to read to the other one to map form, alternating

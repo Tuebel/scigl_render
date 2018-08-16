@@ -8,6 +8,7 @@ OffscreenRender::OffscreenRender(std::shared_ptr<FrameBuffer> framebuffer,
                                  size_t buffer_size)
     : fbo(framebuffer)
 {
+  this->buffer_size = buffer_size;
   glGenBuffers(pbos.size(), pbos.data());
   for (size_t i = 0; i < pbos.size(); i++)
   {
@@ -65,6 +66,11 @@ void OffscreenRender::swap_indices()
   int temp = pbo_fbo_index;
   pbo_fbo_index = pbo_map_index;
   pbo_map_index = temp;
+}
+
+size_t OffscreenRender::get_buffer_size() const
+{
+  return buffer_size;
 }
 
 } // namespace scigl_render
