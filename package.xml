@@ -18,6 +18,8 @@
   <maintainer email="tim.uebelhoer@outlook.de">Tim Übelhör</maintainer>
   <license>MIT</license>
 
+  <doc_depend>doxygen</doc_depend>
+  <buildtool_depend>cmake</buildtool_depend>
   <build_depend>gl3w</build_depend>
   <depend>OpenGL</depend>
   <depend>glfw</depend>
@@ -25,6 +27,6 @@
   <depend>glm</depend>
 
   <export>
-    <build_type>ament_cmake</build_type>
+    <build_type>cmake</build_type>
   </export>
 </package>
