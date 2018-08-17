@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     std::shared_ptr<GLContext> context =
         std::make_shared<GLContext>(true, WIDTH, HEIGHT);
     ExampleRender render(context, DepthShader::create_shader(),
-                         GL_RED, GL_UNSIGNED_SHORT, GL_R16, argv[1],
+                         GL_RED, GL_FLOAT, GL_R32F, argv[1],
                          std::move(light));
     // main loop
     while (!glfwWindowShouldClose(context->get_window()))
