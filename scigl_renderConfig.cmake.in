@@ -1,0 +1,17 @@
+get_filename_component(FILTER_BAY_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set(SCIGL_RENDER_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
+
+include(CMakeFindDependencyMacro)
+find_dependency(filter_bay REQUIRED)
+find_dependency(OpenGL REQUIRED)
+find_dependency(gl3w REQUIRED)
+find_dependency(glfw3 3.2 REQUIRED)
+find_dependency(assimp REQUIRED)
+find_dependency(glm REQUIRED)
+
+if(NOT TARGET scigl_render)
+  include(${CMAKE_CURRENT_LIST_DIR}/scigl_render_targets.cmake)
+endif()
+
+set(SCIGL_RENDER_LIBRARIES scigl_render)
+set(SCIGL_RENDER_EXECUTABLE scigl_viewer scigl_depth_viewer)

@@ -18,7 +18,8 @@ find_package(assimp REQUIRED)
 find_package(glm REQUIRED)
 
 # library
-add_library(scigl_render
+add_library(scigl_render)
+target_sources(scigl_render PRIVATE
   src/gl_context.cpp
   src/render/frame_buffer.cpp
   src/render/offscreen_render.cpp
@@ -52,15 +53,29 @@ target_link_libraries(scigl_depth_viewer
   scigl_render)
   
 
-# installation of library
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION include)
-install(FILES scigl_render-config.cmake DESTINATION lib/scigl_render)
-install(TARGETS scigl_render DESTINATION lib EXPORT scigl_render_targets)
-install(EXPORT scigl_render_targets DESTINATION lib/scigl_render)
-export(TARGETS scigl_render FILE scigl_render_exports.cmake)
-# installation of scigl_viewer
-install(TARGETS
-  scigl_viewer scigl_depth_viewer
-  ARCHIVE DESTINATION lib
+# install target
+install(DIRECTORY include/scigl_render DESTINATION include)
+install(TARGETS scigl_render scigl_viewer scigl_depth_viewer
+  EXPORT scigl_render_targets
   LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)
+  ARCHIVE DESTINATION lib
+  RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include)
+# versioning
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+  scigl_renderConfigVersion.cmake
+  VERSION 0.1
+  COMPATIBILITY AnyNewerVersion)
+# for find_package support
+install(EXPORT scigl_render_targets
+  FILE scigl_render_targets.cmake
+  DESTINATION lib/cmake/scigl_render)
+configure_file(scigl_renderConfig.cmake.in scigl_renderConfig.cmake @ONLY)
+install(FILES 
+  "${CMAKE_CURRENT_BINARY_DIR}/scigl_renderConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/scigl_renderConfigVersion.cmake"
+  DESTINATION lib/cmake/scigl_render)
+# export for source tree
+export(TARGETS scigl_render FILE scigl_render_targets.cmake)
+export(PACKAGE scigl_render)
