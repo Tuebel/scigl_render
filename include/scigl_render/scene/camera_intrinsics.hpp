@@ -13,9 +13,8 @@ camera model:
 OpenCV: https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html
 Origin right-handed, in upper left corner, x points right, y down.
 */
-class CameraIntrinsics
+struct CameraIntrinsics
 {
-public:
   /*! The width of the image in pixels */
   int width = 640;
   /*! The height of the image in pixels*/
