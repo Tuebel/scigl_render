@@ -66,7 +66,6 @@ void ExampleRender::process_data(const void *data)
   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, gl_context->get_width(),
                   gl_context->get_height(), texture_format, texture_type,
                   image.data());
-  // delete[] test;
   glDisable(GL_DEPTH_TEST);
   glClearColor(0, 0, 0, 0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

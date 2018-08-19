@@ -9,14 +9,19 @@ namespace scigl_render
 {
 /*!
 A camera has a position in the world (extrinsics) and projection (intrinsic).
-Simplified access to the transformations via translation (x, y, z)
-+ yaw, pitch & roll (z, y, x).
+The intrinsics are calculated using the OpenCV camera model:
+  - x-axis points right
+  - y-axis points down
+  - z-axis points into the image plane
+So use the OpenCV / ROS frame convention to set the extrinsic pose.
 */
 class Camera
 {
 public:
   /*!
-  Current pose of the camera in cartesian coordinates.
+  Current pose of the camera in cartesian coordinates according the ROS camera
+  frame convention (see Header defintion: 
+  http://docs.ros.org/melodic/api/sensor_msgs/html/msg/CameraInfo.html)
   */
   QuaternionPose pose;
 
@@ -31,7 +36,7 @@ public:
 
   /*!
   The view matrix results by moving the entire scene in the opposite direction
-  of the camera transformation.
+  of the camera transformation (passive transformation of the camera).
   */
   glm::mat4 get_view_matrix() const;
 

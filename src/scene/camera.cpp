@@ -22,14 +22,17 @@ glm::mat4 Camera::calc_projection_matrix(const CameraIntrinsics &intrinsics)
   // perspecitve matrix is almost the intrinisc matrix K
   // only modification: carry on the w-value for z-depth
   glm::mat4 perspective(0);
+  // x-axis is the same for both
   perspective[0][0] = intrinsics.f_x;
-  perspective[1][0] = intrinsics.s;
-  // OpenCV: y points down, OpenGL: y points up
+  // y-axis points to the opposite direction
+  perspective[1][0] = -intrinsics.s;
   perspective[1][1] = -intrinsics.f_y;
+  // z-axis points to thhe opposite direction
   perspective[2][0] = -intrinsics.c_x;
   perspective[2][1] = -intrinsics.c_y;
-  perspective[2][2] = intrinsics.near + intrinsics.far;
   perspective[2][3] = -1;
+  // OpenGL specific: scales w between -near and -far.
+  perspective[2][2] = intrinsics.near + intrinsics.far;
   perspective[3][2] = intrinsics.near * intrinsics.far;
   // transform to ndc using the OpenCV left, right, bottom, top
   glm::mat4 ortho = glm::ortho<float>(0, intrinsics.width, intrinsics.height, 0,

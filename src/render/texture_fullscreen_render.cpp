@@ -3,31 +3,49 @@
 
 namespace scigl_render
 {
-const float TextureFullscreenRender::vertices[] =
-    {-1.0f, 1.0f, 0.0f, 1.0f,
-     -1.0f, -1.0f, 0.0f, 0.0f,
-     1.0f, -1.0f, 1.0f, 0.0f,
+/*!
+The geometry shader creates the vertices. Nevertheless a vertex shader MUST be
+provided so it is simply empty.
+*/
+const std::string TextureFullscreenRender::vertex_source = R"(
+#version 330 core
 
-     -1.0f, 1.0f, 0.0f, 1.0f,
-     1.0f, -1.0f, 1.0f, 0.0f,
-     1.0f, 1.0f, 1.0f, 1.0f};
+void main()
+{
+})";
 
-const std::string TextureFullscreenRender::vertex_source =
-    R"(#version 330 core
-layout (location = 0) in vec2 position;
-layout (location = 1) in vec2 texture_coordinate_in;
+/*!
+Creates a fullscreen quad with z-Coordinate -1.0, so stuff can be rendered in
+front of the texture :)
+*/
+const std::string TextureFullscreenRender::geometry_source = R"(
+#version 330 core
+layout(points) in;
+layout(triangle_strip, max_vertices = 4) out;
 out vec2 texture_coordinate;
 
 void main()
 {
-  gl_Position = vec4(position.x, position.y, 0.0, 1.0); 
-  texture_coordinate = texture_coordinate_in;
+  gl_Position = vec4(1.0, 1.0, -1.0, 1.0);
+  texture_coordinate = vec2(1.0, 1.0);
+  EmitVertex();
+  gl_Position = vec4(-1.0, 1.0, -1.0, 1.0);
+  texture_coordinate = vec2(0.0, 1.0);
+  EmitVertex();
+  gl_Position = vec4(1.0, -1.0, -1.0, 1.0);
+  texture_coordinate = vec2(1.0, 0.0);
+  EmitVertex();
+  gl_Position = vec4(-1.0, -1.0, -1.0, 1.0);
+  texture_coordinate = vec2(0.0, 0.0);
+  EmitVertex();
+  EndPrimitive();
 })";
 
-const std::string TextureFullscreenRender::geometry_source = "";
-
-const std::string TextureFullscreenRender::fragment_source =
-    R"(#version 330 core 
+/*!
+Renderesthe texture
+*/
+const std::string TextureFullscreenRender::fragment_source = R"(
+#version 330 core 
 in vec2 texture_coordinate;
 uniform sampler2D texture0;
 out vec4 color;
@@ -42,16 +60,7 @@ TextureFullscreenRender::TextureFullscreenRender()
 {
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
-  // vertex 3D coordinates
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
-  // texture coordinates
-  glEnableVertexAttribArray(1);
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
-                        (void *)(2 * sizeof(float)));
+  glBindVertexArray(0);
 }
 
 void TextureFullscreenRender::draw(GLuint texture)
@@ -61,7 +70,8 @@ void TextureFullscreenRender::draw(GLuint texture)
   glBindTexture(GL_TEXTURE_2D, texture);
   shader.setInt("texture0", 0);
   glBindVertexArray(vao);
-  glDrawArrays(GL_TRIANGLES, 0, 6);
+  glDrawArrays(GL_POINTS, 0, 1);
   glBindTexture(GL_TEXTURE_2D, 0);
+  glBindVertexArray(0);
 }
 } // namespace scigl_render
