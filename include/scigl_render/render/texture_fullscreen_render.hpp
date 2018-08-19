@@ -22,7 +22,6 @@ public:
 
 private:
   GLuint vao;
-  GLuint vbo;
   const static float vertices[];
   Shader shader;
   static const std::string vertex_source;
