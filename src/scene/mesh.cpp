@@ -131,23 +131,22 @@ void Mesh::init()
 
 void Mesh::draw(const Shader &shader) const
 {
-  {
-    shader.setVec3("material.ambient", material.ambient);
-    shader.setVec3("material.diffuse", material.diffuse);
-    shader.setVec3("material.specular", material.specular);
-    shader.setFloat("material.shininess", material.shininess);
-    // Shader shall sample form texture0
-    shader.setInt("texture0", 0);
-    shader.setFloat("diffuse_texture_strength", texture.strength);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture.id);
-    // draw the vertex array
-    glBindVertexArray(VAO);
-    // do not use indices since we are using an EBO
-    glDrawElements(GL_TRIANGLES, vertex_indices.size(), GL_UNSIGNED_INT, 0);
-    // Reset
-    glBindVertexArray(0);
-  }
+  shader.activate();
+  shader.setVec3("material.ambient", material.ambient);
+  shader.setVec3("material.diffuse", material.diffuse);
+  shader.setVec3("material.specular", material.specular);
+  shader.setFloat("material.shininess", material.shininess);
+  // Shader shall sample form texture0
+  shader.setInt("texture0", 0);
+  shader.setFloat("diffuse_texture_strength", texture.strength);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture.id);
+  // draw the vertex array
+  glBindVertexArray(VAO);
+  // do not use indices since we are using an EBO
+  glDrawElements(GL_TRIANGLES, vertex_indices.size(), GL_UNSIGNED_INT, 0);
+  // Reset
+  glBindVertexArray(0);
 }
 
 DiffuseTexture Mesh::load_diffuse_texture(const aiMaterial *material)

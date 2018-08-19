@@ -59,6 +59,7 @@ glm::mat4 CvCamera::get_projection_matrix() const
 
 void CvCamera::set_in_shader(const Shader &shader) const
 {
+  shader.activate();
   shader.setMat4("projection_matrix", get_projection_matrix());
   shader.setMat4("view_matrix", get_view_matrix());
 }

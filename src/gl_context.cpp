@@ -5,7 +5,8 @@
 
 namespace scigl_render
 {
-GLContext::GLContext(bool visible, int w, int h) : width(w), height(h)
+GLContext::GLContext(bool visible, bool fullscreen, int w, int h)
+    : width(w), height(h)
 {
   glfwInit();
   // compability requirements
@@ -18,7 +19,15 @@ GLContext::GLContext(bool visible, int w, int h) : width(w), height(h)
   {
     glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
   }
-  window = glfwCreateWindow(width, height, "My Title", NULL, NULL);
+  if (fullscreen)
+  {
+    window = glfwCreateWindow(width, height, "My Title",
+                              glfwGetPrimaryMonitor(), NULL);
+  }
+  else
+  {
+    window = glfwCreateWindow(width, height, "My Title", NULL, NULL);
+  }
   if (!window)
   {
     throw std::runtime_error("Failed to create glfw context");

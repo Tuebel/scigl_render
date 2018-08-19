@@ -4,48 +4,45 @@
 
 namespace scigl_render
 {
-OffscreenRender::OffscreenRender(std::shared_ptr<FrameBuffer> framebuffer,
-                                 size_t buffer_size)
-    : fbo(framebuffer)
+OffscreenRender::OffscreenRender(int width, int height, size_t pixel_size,
+                                 GLenum internal_format)
+    : width(width), height(height),
+      framebuffer(width, height, internal_format)
 {
-  this->buffer_size = buffer_size;
   glGenBuffers(pbos.size(), pbos.data());
   for (size_t i = 0; i < pbos.size(); i++)
   {
     glBindBuffer(GL_PIXEL_PACK_BUFFER, pbos[i]);
     // constantly reading new contents
-    glBufferData(GL_PIXEL_PACK_BUFFER, buffer_size, 0, GL_DYNAMIC_READ);
+    glBufferData(GL_PIXEL_PACK_BUFFER, width * height * pixel_size, 0,
+                 GL_DYNAMIC_READ);
   }
   glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 }
 
-void OffscreenRender::start_render(const std::vector<Model> &models,
-                                   const CvCamera &camera,
-                                   const DiffuseLight &light,
-                                   const Shader &shader)
+void OffscreenRender::activate_fbo()
 {
-  // Render the scene
-  fbo->clear();
-  fbo->activate();
-  shader.activate();
-  camera.set_in_shader(shader);
-  light.set_in_shader(shader);
-  for (auto const &model : models)
-  {
-    model.draw(shader);
-  }
-  fbo->deactivate();
+  framebuffer.activate();
 }
 
-void OffscreenRender::start_read()
+void OffscreenRender::clear_fbo()
 {
-  fbo->activate();
+  framebuffer.clear();
+}
+
+void OffscreenRender::deactivate_fbo()
+{
+  framebuffer.deactivate();
+}
+
+void OffscreenRender::start_read(GLenum format, GLenum type)
+{
+  framebuffer.activate();
   glReadBuffer(GL_COLOR_ATTACHMENT0);
   glBindBuffer(GL_PIXEL_PACK_BUFFER, pbos[pbo_fbo_index]);
-  glReadPixels(0, 0, fbo->get_width(), fbo->get_height(), fbo->get_format(),
-               fbo->get_type(), nullptr);
+  glReadPixels(0, 0, width, height, format, type, nullptr);
   glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-  fbo->deactivate();
+  framebuffer.deactivate();
 }
 
 void OffscreenRender::read_data(
@@ -66,11 +63,6 @@ void OffscreenRender::swap_indices()
   int temp = pbo_fbo_index;
   pbo_fbo_index = pbo_map_index;
   pbo_map_index = temp;
-}
-
-size_t OffscreenRender::get_buffer_size() const
-{
-  return buffer_size;
 }
 
 } // namespace scigl_render

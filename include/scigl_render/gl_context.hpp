@@ -10,7 +10,7 @@ The copy constructor is deleted, use a shard_ptr.
 class GLContext
 {
 public:
-  GLContext(bool visible, int width, int height);
+  GLContext(bool visible, bool fullscreen, int width, int height);
   GLContext(const GLContext &) = delete;
   ~GLContext();
 

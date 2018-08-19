@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     light.color = glm::vec3(0.36, 0.4, 0.3);
     // Setup renderer
     std::shared_ptr<GLContext> context =
-        std::make_shared<GLContext>(true, WIDTH, HEIGHT);
+        std::make_shared<GLContext>(true, false, WIDTH, HEIGHT);
     ExampleRender render(context, DepthShader::create_shader(),
                          GL_RED, GL_FLOAT, GL_R32F, sizeof(float),
                          argv[1],

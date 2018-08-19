@@ -4,13 +4,10 @@
 
 namespace scigl_render
 {
-FrameBuffer::FrameBuffer(int width, int height, GLint internal_format,
-                         GLenum format, GLenum type)
+FrameBuffer::FrameBuffer(int width, int height, GLenum internal_format)
 {
   this->width = width;
   this->height = height;
-  this->format = format;
-  this->type = type;
   // Create framebuffer with texture attachement
   glGenFramebuffers(1, &texture_fbo);
   activate();
@@ -77,15 +74,5 @@ int FrameBuffer::get_width()
 int FrameBuffer::get_height()
 {
   return height;
-}
-
-GLenum FrameBuffer::get_format()
-{
-  return format;
-}
-
-GLenum FrameBuffer::get_type()
-{
-  return type;
 }
 } // namespace scigl_render

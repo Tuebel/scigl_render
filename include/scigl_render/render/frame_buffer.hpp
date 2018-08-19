@@ -13,17 +13,14 @@ class FrameBuffer
 {
 public:
   /*!
-  Creates the framebuffer. parametrizes the glTexImage2D method.
+  Creates the framebuffer with a texture attachment to render to.
   \throws a runtime_error on failure
   \param width of the texture
   \param height of the texture
-  \param internal_format number of color components in the texture
-  \param format of the pixel data (external)
-  \param type data type of the pixel data
+  \param internal_format color components & size of each
   */
-  FrameBuffer(int width, int height, GLint internal_format = GL_R32F,
-              GLenum format = GL_RED, GLenum type = GL_FLOAT);
-  FrameBuffer(const FrameBuffer&) = delete;
+  FrameBuffer(int width, int height, GLenum internal_format = GL_RGB8);
+  FrameBuffer(const FrameBuffer &) = delete;
   ~FrameBuffer();
 
   /*!
@@ -55,14 +52,9 @@ public:
 
   int get_height();
 
-  GLenum get_format();
-
-  GLenum get_type();
-
 private:
   // Parameterization
   int width, height;
-  GLenum format, type;
   // framebuffer object to render the texture into
   GLuint texture_fbo;
   // the texture  attached to the fbo

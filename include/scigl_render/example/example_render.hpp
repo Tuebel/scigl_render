@@ -51,17 +51,16 @@ private:
   GLenum texture_type;
 
   std::shared_ptr<GLContext> gl_context;
-  DiffuseLight light;
+  // Render targets
+  OffscreenRender offscreen_render;
+  TextureFullscreenRender texture_render;
+  // buffer for reading from the offscreen render
+  std::vector<unsigned char> image_buffer;
+
   // renders the 3D scene
   Shader scene_shader;
-  // renders a texture to a quad (screen)
-  TextureFullscreenRender fullscreen_render;
-
-  std::shared_ptr<FrameBuffer> framebuffer;
-  // Size of the image in bytes (width*height*color_channels*sizeof(type))
-  size_t buffer_size;
-  std::unique_ptr<OffscreenRender> offscreen_render;
-  std::vector<Model> models;
+  Model model;
+  DiffuseLight light;
 
   /*!
   Callback for the offscreen render

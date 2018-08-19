@@ -30,27 +30,28 @@ public:
   /*!
   Renders the scene off-screen and calculates the depth values.
   Throws a runtime_error if the creation failed.
-  \param framebuffer is used to render to. 
-  \param buffer_size full sizein bytes of the image to read (width * height * 
-  color_channel_count * sizeof(type)). Must match the the framebuffers content.
+  \param width number of image columns
+  \param height number of image rows
+  \param pixel_size the size of each pixel: number_channels * sizeof_component
   */
-  OffscreenRender(std::shared_ptr<FrameBuffer> framebuffer, size_t buffer_size);
+  OffscreenRender(int width, int height, size_t pixel_size,
+                  GLenum internal_format);
 
-  /*!
-  Starts to render this scene to the framebuffer. This operation is 
-  asynchronous.
-  \models are rendered in its current pose into one frame. The result of this
-  render will be returned after the nex call of this function.
-  \param camera the current camera extrinsic and intrinsic parameters
-  \param shader the shader that is used to render the scene
-  */
-  void start_render(const std::vector<Model> &models, const CvCamera &camera,
-                    const DiffuseLight &light, const Shader &shader);
+  /*! Activates the underlying framebuffer for rendering */
+  void activate_fbo();
+
+  /*! Clears the contents of the framebuffer */
+  void clear_fbo();
+
+  /*! Deactivates the framebuffer. Good practice after finishing the render */
+  void deactivate_fbo();
 
   /*!
   Starts reading from the FBO to the backbuffer PBO.
+  \param format specifies the channels, for example GL_RGB
+  \param type primitive to store, for example GL_UNSIGNED_BYTE
   */
-  void start_read();
+  void start_read(GLenum format, GLenum type);
 
   /*!
   Synchronously reads the data from the front buffer (one frame delayed!). After
@@ -62,12 +63,11 @@ public:
   */
   void read_data(const ProcessDataCallback &process_data);
 
-  size_t get_buffer_size() const;
-
 private:
-  size_t buffer_size;
+  int width;
+  int height;
   // Render to this
-  std::shared_ptr<FrameBuffer> fbo;
+  FrameBuffer framebuffer;
   // Two pbos one to read to the other one to map form, alternating
   std::array<GLuint, 2> pbos;
   // transfer from fbo to pbo via glReadPixels

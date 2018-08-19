@@ -31,8 +31,8 @@ Provide the model as argument via command line.
 int main(int argc, char *argv[])
 {
     // Some default parameters
-    const int WIDTH = 1024;
-    const int HEIGHT = 720;
+    const int WIDTH = 640;
+    const int HEIGHT = 480;
     using namespace scigl_render;
     if (argc < 2)
     {
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     light.color = glm::vec3(0.36, 0.4, 0.3);
     // Setup renderer
     std::shared_ptr<GLContext> context =
-        std::make_shared<GLContext>(true, WIDTH, HEIGHT);
+        std::make_shared<GLContext>(true, false, WIDTH, HEIGHT);
     ExampleRender render(context, SingleTextureShader::create_shader(),
                          GL_BGR, GL_UNSIGNED_BYTE, GL_RGB8, 3,
                          argv[1],
