@@ -1,6 +1,6 @@
 #pragma once
 #include <scigl_render/render/frame_buffer.hpp>
-#include <scigl_render/scene/camera.hpp>
+#include <scigl_render/scene/cv_camera.hpp>
 #include <scigl_render/scene/diffuse_light.hpp>
 #include <scigl_render/scene/model.hpp>
 #include <scigl_render/shader/shader.hpp>
@@ -44,7 +44,7 @@ public:
   \param camera the current camera extrinsic and intrinsic parameters
   \param shader the shader that is used to render the scene
   */
-  void start_render(const std::vector<Model> &models, const Camera &camera,
+  void start_render(const std::vector<Model> &models, const CvCamera &camera,
                     const DiffuseLight &light, const Shader &shader);
 
   /*!

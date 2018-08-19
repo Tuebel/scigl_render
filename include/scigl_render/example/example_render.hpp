@@ -2,7 +2,7 @@
 #include <scigl_render/gl_context.hpp>
 #include <scigl_render/render/offscreen_render.hpp>
 #include <scigl_render/render/texture_fullscreen_render.hpp>
-#include <scigl_render/scene/camera.hpp>
+#include <scigl_render/scene/cv_camera.hpp>
 #include <scigl_render/scene/diffuse_light.hpp>
 #include <scigl_render/scene/model.hpp>
 #include <scigl_render/shader/shader.hpp>
@@ -40,7 +40,7 @@ public:
   /*!
   Continues to render the next frame.
   */
-  void next_frame(const Camera &camera);
+  void next_frame(const CvCamera &camera);
 
 private:
   GLenum texture_format;

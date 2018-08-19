@@ -5,14 +5,14 @@
 #include <iostream>
 #include <scigl_render/gl_context.hpp>
 #include <scigl_render/example/example_render.hpp>
-#include <scigl_render/scene/camera.hpp>
+#include <scigl_render/scene/cv_camera.hpp>
 #include <scigl_render/scene/diffuse_light.hpp>
 #include <scigl_render/shader/single_texture_shader.hpp>
 
 // forward declare callbacks
 // get mouse and keyboard inputs
 void process_input(GLFWwindow *window, scigl_render::CartesianPose &camera_pose,
-                   const scigl_render::Camera &camera);
+                   const scigl_render::CvCamera &camera);
 
 // Debug printing
 std::ostream &operator<<(std::ostream &out, const glm::mat4 &mat)
@@ -53,9 +53,9 @@ int main(int argc, char *argv[])
     // camera_intrinsics.f_y = 250;
     // camera_intrinsics.c_x = 320;
     // camera_intrinsics.c_y = 240;
-    Camera camera(camera_intrinsics);
+    CvCamera camera(camera_intrinsics);
     // Test if Cartesian -> Quaternion works
-    CartesianPose camera_pose = {glm::vec3(0, 0, 2), glm::vec3(0, 0, 0)};
+    CartesianPose camera_pose = {glm::vec3(0, 0, -2), glm::vec3(0, 0, 0)};
     camera.pose = camera_pose.to_quaternion_pose();
     DiffuseLight light;
     light.position = glm::vec3(2, 0, 0);
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 
 void process_input(GLFWwindow *window,
                    scigl_render::CartesianPose &camera_pose,
-                   const scigl_render::Camera &camera)
+                   const scigl_render::CvCamera &camera)
 {
     // exit
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)

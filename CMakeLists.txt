@@ -24,7 +24,7 @@ target_sources(scigl_render PRIVATE
   src/render/frame_buffer.cpp
   src/render/offscreen_render.cpp
   src/render/texture_fullscreen_render.cpp
-  src/scene/camera.cpp
+  src/scene/cv_camera.cpp
   src/scene/diffuse_light.cpp
   src/scene/mesh.cpp  
   src/scene/model.cpp

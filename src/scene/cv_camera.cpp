@@ -1,8 +1,8 @@
-#include <scigl_render/scene/camera.hpp>
+#include <scigl_render/scene/cv_camera.hpp>
 
 namespace scigl_render
 {
-Camera::Camera(CameraIntrinsics intr)
+CvCamera::CvCamera(CameraIntrinsics intr)
     : projection_matrix(calc_projection_matrix(intr)),
       intrinsics(std::move(intr))
 
@@ -11,12 +11,24 @@ Camera::Camera(CameraIntrinsics intr)
   pose = {};
 }
 
-glm::mat4 Camera::get_view_matrix() const
+glm::mat4 CvCamera::get_view_matrix() const
 {
-  return pose.passive_transformation();
+  auto view_matrix = pose.passive_transformation();
+  // Negate y & z axes -> negate corresponding rows (column major mat)
+  view_matrix[0][1] = -view_matrix[0][1];
+  view_matrix[1][1] = -view_matrix[1][1];
+  view_matrix[2][1] = -view_matrix[2][1];
+  view_matrix[3][1] = -view_matrix[3][1];
+
+  view_matrix[0][2] = -view_matrix[0][2];
+  view_matrix[1][2] = -view_matrix[1][2];
+  view_matrix[2][2] = -view_matrix[2][2];
+  view_matrix[3][2] = -view_matrix[3][2];
+
+  return view_matrix;
 }
 
-glm::mat4 Camera::calc_projection_matrix(const CameraIntrinsics &intrinsics)
+glm::mat4 CvCamera::calc_projection_matrix(const CameraIntrinsics &intrinsics)
 {
   // The idea: http://ksimek.github.io/2013/06/03/calibrated_cameras_in_opengl/
   // perspecitve matrix is almost the intrinisc matrix K
@@ -40,22 +52,22 @@ glm::mat4 Camera::calc_projection_matrix(const CameraIntrinsics &intrinsics)
   return (ortho * perspective);
 }
 
-glm::mat4 Camera::get_projection_matrix() const
+glm::mat4 CvCamera::get_projection_matrix() const
 {
   return projection_matrix;
 }
 
-void Camera::set_in_shader(const Shader &shader) const
+void CvCamera::set_in_shader(const Shader &shader) const
 {
   shader.setMat4("projection_matrix", get_projection_matrix());
   shader.setMat4("view_matrix", get_view_matrix());
 }
 
-CameraIntrinsics Camera::get_intrinsics() const
+CameraIntrinsics CvCamera::get_intrinsics() const
 {
   return intrinsics;
 }
-void Camera::set_intrinsics(CameraIntrinsics intrinsics)
+void CvCamera::set_intrinsics(CameraIntrinsics intrinsics)
 {
   projection_matrix = calc_projection_matrix(intrinsics);
   this->intrinsics = std::move(intrinsics);

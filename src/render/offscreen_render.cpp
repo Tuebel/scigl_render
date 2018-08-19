@@ -20,7 +20,7 @@ OffscreenRender::OffscreenRender(std::shared_ptr<FrameBuffer> framebuffer,
 }
 
 void OffscreenRender::start_render(const std::vector<Model> &models,
-                                   const Camera &camera,
+                                   const CvCamera &camera,
                                    const DiffuseLight &light,
                                    const Shader &shader)
 {

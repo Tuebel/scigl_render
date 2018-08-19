@@ -41,7 +41,7 @@ ExampleRender::ExampleRender(std::shared_ptr<GLContext> context,
   check_gl_error("example render created");
 }
 
-void ExampleRender::next_frame(const Camera &camera)
+void ExampleRender::next_frame(const CvCamera &camera)
 {
   using namespace std::placeholders;
   check_gl_error("next frame begin");

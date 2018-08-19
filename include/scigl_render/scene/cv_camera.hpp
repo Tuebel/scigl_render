@@ -9,13 +9,13 @@ namespace scigl_render
 {
 /*!
 A camera has a position in the world (extrinsics) and projection (intrinsic).
-The intrinsics are calculated using the OpenCV camera model:
+The extrinsics and intrinsics are calculated using the OpenCV camera model:
   - x-axis points right
   - y-axis points down
   - z-axis points into the image plane
 So use the OpenCV / ROS frame convention to set the extrinsic pose.
 */
-class Camera
+class CvCamera
 {
 public:
   /*!
@@ -28,15 +28,16 @@ public:
   /*!
   Default constructor. Don't forget to set the intrinsics!
   */
-  Camera();
+  CvCamera();
   /*!
   Constructor with intrinsics
   */
-  Camera(CameraIntrinsics intrinsics);
+  CvCamera(CameraIntrinsics intrinsics);
 
   /*!
   The view matrix results by moving the entire scene in the opposite direction
-  of the camera transformation (passive transformation of the camera).
+  of the camera transformation (passive transformation of the camera). Converts
+  the OpenCV/ROS extrinsic pose to the OpenGL pose (negate y & z axes).
   */
   glm::mat4 get_view_matrix() const;
 
