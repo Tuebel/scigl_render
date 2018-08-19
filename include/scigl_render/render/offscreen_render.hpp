@@ -1,9 +1,5 @@
 #pragma once
 #include <scigl_render/render/frame_buffer.hpp>
-#include <scigl_render/scene/cv_camera.hpp>
-#include <scigl_render/scene/diffuse_light.hpp>
-#include <scigl_render/scene/model.hpp>
-#include <scigl_render/shader/shader.hpp>
 #include <array>
 #include <functional>
 #include <memory>
