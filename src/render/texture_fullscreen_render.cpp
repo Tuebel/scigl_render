@@ -1,4 +1,5 @@
 #include <scigl_render/render/texture_fullscreen_render.hpp>
+#include <scigl_render/check_gl_error.hpp>
 #include <iostream>
 
 namespace scigl_render
@@ -7,7 +8,7 @@ namespace scigl_render
 The geometry shader creates the vertices. Nevertheless a vertex shader MUST be
 provided so it is simply empty.
 */
-const std::string TextureFullscreenRender::vertex_source = R"(
+const std::string vertex_source = R"(
 #version 330 core
 
 void main()
@@ -18,7 +19,7 @@ void main()
 Creates a fullscreen quad with z-Coordinate -1.0, so stuff can be rendered in
 front of the texture :)
 */
-const std::string TextureFullscreenRender::geometry_source = R"(
+const std::string geometry_source = R"(
 #version 330 core
 layout(points) in;
 layout(triangle_strip, max_vertices = 4) out;
@@ -44,7 +45,7 @@ void main()
 /*!
 Renderesthe texture
 */
-const std::string TextureFullscreenRender::fragment_source = R"(
+const std::string fragment_source = R"(
 #version 330 core 
 in vec2 texture_coordinate;
 uniform sampler2D texture0;
@@ -55,23 +56,42 @@ void main()
   color = texture(texture0, texture_coordinate);
 })";
 
-TextureFullscreenRender::TextureFullscreenRender()
-    : shader(vertex_source, geometry_source, fragment_source)
+TextureFullscreenRender::TextureFullscreenRender(
+    int width, int height, GLint internal_format)
+    : width(width), height(height),
+      shader(vertex_source, geometry_source, fragment_source)
 {
+  // create the texture buffer
+  glGenTextures(1, &texture);
+  glBindTexture(GL_TEXTURE_2D, texture);
+  glTexStorage2D(GL_TEXTURE_2D, 1, internal_format, width, height);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  // create dummy VAO
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
   glBindVertexArray(0);
 }
 
-void TextureFullscreenRender::draw(GLuint texture)
+void TextureFullscreenRender::draw(
+    const GLvoid *pixels, GLenum format, GLenum type)
 {
+  // activate the shader and texure
   shader.activate();
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture);
+  check_gl_error("bound texture");
+  // copy data to OpenGL
+  std::cout << "format " << format << " type " << type << "\n";
+  glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, type, pixels);
+  check_gl_error("sub image 2d");
+  // draw the image
   shader.setInt("texture0", 0);
   glBindVertexArray(vao);
   glDrawArrays(GL_POINTS, 0, 1);
+  check_gl_error("draw");
+  // unbind the resources
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindVertexArray(0);
+  check_gl_error("end draw");
 }
 } // namespace scigl_render

@@ -4,40 +4,38 @@
 
 namespace scigl_render
 {
-// const GLenum ExampleRender::FORMAT = GL_RGBA;
-// const GLenum ExampleRender::TYPE = GL_UNSIGNED_BYTE;
-// const GLint ExampleRender::INTERNAL_FORMAT = GL_RGBA8;
-
 // I know there is a lot of configuration but it is intendet to be flexible
-ExampleRender::ExampleRender(std::shared_ptr<GLContext> context,
-                             Shader shader, GLenum tex_format, GLenum tex_type,
-                             GLint tex_internal_format,
-                             const std::string &model_path, DiffuseLight light)
-    : texture_format(tex_format), texture_type(tex_type), gl_context(context),
-      light(std::move(light)), scene_shader(std::move(shader))
+ExampleRender::ExampleRender(
+    std::shared_ptr<GLContext> context,
+    Shader shader,
+    GLenum tex_format, GLenum tex_type, GLint tex_internal_format,
+    size_t pixel_size,
+    const std::string &model_path,
+    DiffuseLight light)
+    : texture_format(tex_format),
+      texture_type(tex_type),
+      gl_context(context),
+      light(std::move(light)),
+      scene_shader(std::move(shader)),
+      fullscreen_render(gl_context->get_width(),
+                        gl_context->get_height(),
+                        tex_internal_format)
+
 {
   // Configure the global rendering settings
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-  // Offscreen render context
+  // Offscreen rendering
   framebuffer = std::make_shared<FrameBuffer>(
       gl_context->get_width(), gl_context->get_height(), tex_internal_format,
       tex_format, tex_type);
-  // Since I don't know how to extract sizes from the GLenum type, just reserve
-  // plenty for RGBA32F
   buffer_size = gl_context->get_width() * gl_context->get_height() *
-                4 * sizeof(float);
+                pixel_size;
   offscreen_render = std::make_unique<OffscreenRender>(
       framebuffer, buffer_size);
-  // models are expected as vector
+  // models intialization
   Model model(model_path);
   model.scale_factor = 1;
   models.push_back(model);
-  // Create intermediate texture to render on screen after reading pixels
-  glGenTextures(1, &quad_texture);
-  glBindTexture(GL_TEXTURE_2D, quad_texture);
-  glTexStorage2D(GL_TEXTURE_2D, 1, tex_internal_format, gl_context->get_width(),
-                 gl_context->get_height());
-  glBindTexture(GL_TEXTURE_2D, 0);
   check_gl_error("example render created");
 }
 
@@ -59,19 +57,12 @@ void ExampleRender::process_data(const void *data)
   // Now draw framebuffer to the default window framebuffer
   framebuffer->deactivate();
   // Test copying the data, buffer_size is in bytes
-  std::vector<float> image(buffer_size / sizeof(float));
+  std::vector<unsigned char> image(buffer_size);
   memcpy(image.data(), data, buffer_size);
-  // Store the copy in the texture
-  glBindTexture(GL_TEXTURE_2D, quad_texture);
-  glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, gl_context->get_width(),
-                  gl_context->get_height(), texture_format, texture_type,
-                  image.data());
-  glDisable(GL_DEPTH_TEST);
+  // draw the copy
   glClearColor(0, 0, 0, 0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glActiveTexture(GL_TEXTURE0);
-  fullscreen_render.draw(framebuffer->get_texture());
-  glBindTexture(GL_TEXTURE_2D, 0);
+  fullscreen_render.draw(image.data(), texture_format, texture_type);
   // update
   glfwSwapBuffers(gl_context->get_window());
   check_gl_error("process data end");

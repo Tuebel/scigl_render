@@ -29,12 +29,16 @@ public:
   \param tex_format format parameter of glTexImage2D
   \param tex_type type parameter of glTexImage2D
   \param tex_internal_format internal_format parameter of glTexImage2D
+  \param pixel_size the size of one pixel. Must match the internal format:
+  number_of_channels * sizeof(type)
   \param model_path the model to be rendered
   \param light how the light should be parametrized in the scene
   */
   ExampleRender(std::shared_ptr<GLContext> context,
-                Shader shader, GLenum tex_format, GLenum tex_type,
-                GLint tex_internal_format, const std::string &model_path,
+                Shader shader,
+                GLenum tex_format, GLenum tex_type, GLint tex_internal_format,
+                size_t pixel_size,
+                const std::string &model_path,
                 DiffuseLight light);
 
   /*!
@@ -58,8 +62,6 @@ private:
   size_t buffer_size;
   std::unique_ptr<OffscreenRender> offscreen_render;
   std::vector<Model> models;
-  // intermediate texture for rendering to screen after reading pixels
-  GLuint quad_texture;
 
   /*!
   Callback for the offscreen render
