@@ -1,6 +1,4 @@
 #include <scigl_render/render/texture_fullscreen_render.hpp>
-#include <scigl_render/check_gl_error.hpp>
-#include <iostream>
 
 namespace scigl_render
 {
@@ -79,19 +77,14 @@ void TextureFullscreenRender::draw(
   shader.activate();
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture);
-  check_gl_error("bound texture");
   // copy data to OpenGL
-  std::cout << "format " << format << " type " << type << "\n";
   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, type, pixels);
-  check_gl_error("sub image 2d");
   // draw the image
   shader.setInt("texture0", 0);
   glBindVertexArray(vao);
   glDrawArrays(GL_POINTS, 0, 1);
-  check_gl_error("draw");
   // unbind the resources
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindVertexArray(0);
-  check_gl_error("end draw");
 }
 } // namespace scigl_render

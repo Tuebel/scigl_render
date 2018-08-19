@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     std::shared_ptr<GLContext> context =
         std::make_shared<GLContext>(true, WIDTH, HEIGHT);
     ExampleRender render(context, SingleTextureShader::create_shader(),
-                         GL_RGB, GL_UNSIGNED_BYTE, GL_RGB8, 3,
+                         GL_BGR, GL_UNSIGNED_BYTE, GL_RGB8, 3,
                          argv[1],
                          std::move(light));
     // main loop
