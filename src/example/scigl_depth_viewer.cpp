@@ -39,6 +39,11 @@ int main(int argc, char *argv[])
         throw std::runtime_error(
             "No model file provided. Run as */scigl_viwer <model_filename>!");
     }
+    // Setup renderer creates context
+    std::shared_ptr<GLContext> context =
+        std::make_shared<GLContext>(true, false, WIDTH, HEIGHT);
+    ExampleRender render(context, DepthShader::create_shader(),
+                         GL_RED, GL_FLOAT, GL_R32F, sizeof(float));
     // Intrinsics of my shitty webcam
     CameraIntrinsics camera_intrinsics;
     camera_intrinsics.width = 640;
@@ -53,24 +58,19 @@ int main(int argc, char *argv[])
     // camera_intrinsics.c_y = 240;
     CvCamera camera(camera_intrinsics);
     // Test if Cartesian -> Quaternion works
-    CartesianPose camera_pose = {glm::vec3(0, 0, -2), glm::vec3(0, 0, 0)};
+    CartesianPose camera_pose = {glm::vec3(0, 0, 0), glm::vec3(0, 0, 0)};
     camera.pose = camera_pose.to_quaternion_pose();
+    Model model(argv[1]);
+    model.pose.position = glm::vec3(0, 0, 1);
     DiffuseLight light;
     light.position = glm::vec3(2, 0, 0);
     light.color = glm::vec3(0.36, 0.4, 0.3);
-    // Setup renderer
-    std::shared_ptr<GLContext> context =
-        std::make_shared<GLContext>(true, false, WIDTH, HEIGHT);
-    ExampleRender render(context, DepthShader::create_shader(),
-                         GL_RED, GL_FLOAT, GL_R32F, sizeof(float),
-                         argv[1],
-                         std::move(light));
     // main loop
     while (!glfwWindowShouldClose(context->get_window()))
     {
         process_input(context->get_window(), camera_pose, camera);
         camera.pose = camera_pose.to_quaternion_pose();
-        render.next_frame(camera);
+        render.next_frame(camera, model, light);
         glfwPollEvents();
     }
     // Finally release the context

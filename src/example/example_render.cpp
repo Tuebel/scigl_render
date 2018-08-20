@@ -9,9 +9,7 @@ ExampleRender::ExampleRender(
     std::shared_ptr<GLContext> context,
     Shader shader,
     GLenum tex_format, GLenum tex_type, GLint tex_internal_format,
-    size_t pixel_size,
-    const std::string &model_path,
-    DiffuseLight light)
+    size_t pixel_size)
     : texture_format(tex_format),
       texture_type(tex_type),
       gl_context(context),
@@ -24,16 +22,15 @@ ExampleRender::ExampleRender(
                      tex_internal_format),
       image_buffer(gl_context->get_width() * gl_context->get_height() *
                    pixel_size),
-      scene_shader(std::move(shader)),
-      model(model_path),
-      light(std::move(light))
+      scene_shader(std::move(shader))
 {
   // Configure the global rendering settings
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   check_gl_error("example render created");
 }
 
-void ExampleRender::next_frame(const CvCamera &camera)
+void ExampleRender::next_frame(const CvCamera &camera, const Model &model,
+                               const DiffuseLight &light)
 {
   using namespace std::placeholders;
   check_gl_error("next frame begin");

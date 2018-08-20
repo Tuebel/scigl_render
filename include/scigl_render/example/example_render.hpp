@@ -37,14 +37,13 @@ public:
   ExampleRender(std::shared_ptr<GLContext> context,
                 Shader shader,
                 GLenum tex_format, GLenum tex_type, GLint tex_internal_format,
-                size_t pixel_size,
-                const std::string &model_path,
-                DiffuseLight light);
+                size_t pixel_size);
 
   /*!
   Continues to render the next frame.
   */
-  void next_frame(const CvCamera &camera);
+  void next_frame(const CvCamera &camera, const Model &model,
+                  const DiffuseLight &light);
 
 private:
   GLenum texture_format;
@@ -59,8 +58,6 @@ private:
 
   // renders the 3D scene
   Shader scene_shader;
-  Model model;
-  DiffuseLight light;
 
   /*!
   Callback for the offscreen render
