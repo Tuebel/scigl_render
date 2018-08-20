@@ -19,7 +19,8 @@ public:
                           GLint internal_format = GL_RGB8);
 
   /*! 
-  Draws the pixels into the currently selected framebuffer
+  Draws the pixels into the currently selected framebuffer. This function 
+  changes glDepthFunc(GL_LEQUAL) so the quad can be seen (z = 1.0).
   \param pixels the pointer to the lower left pixel of the image
   \param format format of a pixel for example GL_RGB
   \param type the type of the storage for example GL_UNSIGNED_BYTE

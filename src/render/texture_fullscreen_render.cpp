@@ -14,8 +14,8 @@ void main()
 })";
 
 /*!
-Creates a fullscreen quad with z-Coordinate -1.0, so stuff can be rendered in
-front of the texture :)
+Creates a fullscreen quad with z-Coordinate 1.0, so stuff can be rendered in
+front of the texture :). Memberberries: looking down z the negative axis.
 */
 const std::string geometry_source = R"(
 #version 330 core
@@ -25,16 +25,16 @@ out vec2 texture_coordinate;
 
 void main()
 {
-  gl_Position = vec4(1.0, 1.0, -1.0, 1.0);
+  gl_Position = vec4(1.0, 1.0, 1.0, 1.0);
   texture_coordinate = vec2(1.0, 1.0);
   EmitVertex();
-  gl_Position = vec4(-1.0, 1.0, -1.0, 1.0);
+  gl_Position = vec4(-1.0, 1.0, 1.0, 1.0);
   texture_coordinate = vec2(0.0, 1.0);
   EmitVertex();
-  gl_Position = vec4(1.0, -1.0, -1.0, 1.0);
+  gl_Position = vec4(1.0, -1.0, 1.0, 1.0);
   texture_coordinate = vec2(1.0, 0.0);
   EmitVertex();
-  gl_Position = vec4(-1.0, -1.0, -1.0, 1.0);
+  gl_Position = vec4(-1.0, -1.0, 1.0, 1.0);
   texture_coordinate = vec2(0.0, 0.0);
   EmitVertex();
   EndPrimitive();
@@ -73,6 +73,8 @@ TextureFullscreenRender::TextureFullscreenRender(
 void TextureFullscreenRender::draw(
     const GLvoid *pixels, GLenum format, GLenum type)
 {
+  // With GL_LESS the cleared buffer (z = 1.0) would always win
+  glDepthFunc(GL_LEQUAL);
   // activate the shader and texure
   shader.activate();
   glActiveTexture(GL_TEXTURE0);
