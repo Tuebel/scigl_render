@@ -8,10 +8,12 @@ endif()
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # find packages
 find_package(gl3w REQUIRED)
-find_package(glfw3 3.2 REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_search_module(GLFW REQUIRED glfw3)
 find_package(assimp REQUIRED)
 find_package(glm REQUIRED)
 
@@ -30,13 +32,12 @@ target_sources(scigl_render PRIVATE
   src/shader/shader.cpp
   src/shader/single_texture_shader.cpp)
 target_include_directories(scigl_render PUBLIC
+  ${GLFW_INCLUDE_DIRS}
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
-target_link_libraries(scigl_render PUBLIC
-  gl3w
-  glfw
-  assimp
-  glm)
+target_link_libraries(scigl_render 
+  PUBLIC gl3w glm ${GLFW_STATIC_LIBRARIES}
+  PRIVATE assimp)
 
 # example apps
 add_executable(scigl_viewer

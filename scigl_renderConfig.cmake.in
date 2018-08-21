@@ -2,10 +2,8 @@ get_filename_component(scigl_render_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 set(scigle_render_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
 
 include(CMakeFindDependencyMacro)
-find_dependency(filter_bay REQUIRED)
-find_dependency(OpenGL REQUIRED)
 find_dependency(gl3w REQUIRED)
-find_dependency(glfw3 3.2 REQUIRED)
+find_dependency(glfw3 REQUIRED)
 find_dependency(assimp REQUIRED)
 find_dependency(glm REQUIRED)
 
