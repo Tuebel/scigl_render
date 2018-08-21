@@ -10,8 +10,6 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # find packages
-cmake_policy(SET CMP0072 NEW)
-find_package(OpenGL REQUIRED)
 find_package(gl3w REQUIRED)
 find_package(glfw3 3.2 REQUIRED)
 find_package(assimp REQUIRED)

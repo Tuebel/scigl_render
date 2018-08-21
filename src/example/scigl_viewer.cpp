@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     camera.pose = camera_pose.to_quaternion_pose();
     DiffuseLight light;
     Model model(argv[1]);
-    model.pose.position = glm::vec3(-0.2, 0, 0.5);
+    model.pose.position = glm::vec3(0, 0, 0.5);
     light.position = glm::vec3(2, 0, 0);
     light.color = glm::vec3(0.36, 0.4, 0.3);
 

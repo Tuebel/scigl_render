@@ -5,8 +5,8 @@
 
 namespace scigl_render
 {
-GLContext::GLContext(bool visible, bool fullscreen, int w, int h)
-    : width(w), height(h)
+GLContext::GLContext(bool visible, bool fullscreen, int width, int height)
+    : width(width), height(height)
 {
   glfwInit();
   // compability requirements
@@ -45,6 +45,7 @@ GLContext::GLContext(bool visible, bool fullscreen, int w, int h)
   std::cout << "OpenGL Version: " << glGetString(GL_VERSION)
             << " GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION)
             << "\n";
+  std::cout << "width " << width << " height " << height << "\n";
   glViewport(0, 0, width, height);
 }
 
