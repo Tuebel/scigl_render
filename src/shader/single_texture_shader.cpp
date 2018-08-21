@@ -29,8 +29,8 @@ void main()
   vec4 world_pos  =  model_matrix * local_pos;
   vec4 view_pos = view_matrix * world_pos;
   gl_Position = projection_matrix * view_pos;
-  normal = normal_in;
-  light_direction = normalize(light_position - position);
+  normal = mat3(transpose(inverse(model_matrix))) * normal_in;
+  light_direction = normalize(light_position - world_pos.xyz);
   texture_coordinate = texture_coordinate_in;
 })";
 }
