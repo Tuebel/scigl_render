@@ -8,17 +8,14 @@ FrameBuffer::FrameBuffer(int width, int height, GLenum internal_format)
 {
   this->width = width;
   this->height = height;
-  // Create framebuffer with texture attachement
-  glGenFramebuffers(1, &texture_fbo);
+  // Create framebuffer with renderbuffer attachements
+  glGenFramebuffers(1, &fbo);
   activate();
-  glGenTextures(1, &texture);
-  glBindTexture(GL_TEXTURE_2D, texture);
-  glTexStorage2D(GL_TEXTURE_2D, 1, internal_format, width, height);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                         texture, 0);
-  // Faster renderbuffer for depth testing and stencil
+  glGenRenderbuffers(1, &color_rbo);
+  glBindRenderbuffer(GL_RENDERBUFFER, color_rbo);
+  glRenderbufferStorage(GL_RENDERBUFFER, internal_format, width, height);
+  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                            GL_RENDERBUFFER, color_rbo);
   glGenRenderbuffers(1, &depth_stencil_rbo);
   glBindRenderbuffer(GL_RENDERBUFFER, depth_stencil_rbo);
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
@@ -38,12 +35,12 @@ FrameBuffer::~FrameBuffer()
   std::cout << "destroyed fbo\n";
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glDeleteRenderbuffers(1, &depth_stencil_rbo);
-  glDeleteFramebuffers(1, &texture_fbo);
+  glDeleteRenderbuffers(1, &color_rbo);
 }
 
 void FrameBuffer::activate()
 {
-  glBindFramebuffer(GL_FRAMEBUFFER, texture_fbo);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 }
 
 void FrameBuffer::deactivate()
@@ -59,20 +56,5 @@ void FrameBuffer::clear(float color, float depth, int stencil)
   glClearStencil(stencil);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
   deactivate();
-}
-
-GLuint FrameBuffer::get_texture()
-{
-  return texture;
-}
-
-int FrameBuffer::get_width()
-{
-  return width;
-}
-
-int FrameBuffer::get_height()
-{
-  return height;
 }
 } // namespace scigl_render

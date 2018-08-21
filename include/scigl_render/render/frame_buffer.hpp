@@ -13,7 +13,7 @@ class FrameBuffer
 {
 public:
   /*!
-  Creates the framebuffer with a texture attachment to render to.
+  Creates the framebuffer with a rednerbuffer attachment to render to.
   \throws a runtime_error on failure
   \param width of the texture
   \param height of the texture
@@ -41,24 +41,13 @@ public:
   */
   void clear(float color = 0, float depth = 1, int stencil = 0);
 
-  /*!
-  Returns the texture that the framebuffer renders to.
-  This can be used with the texture to quad render to display the framebuffers
-  content.
-  */
-  GLuint get_texture();
-
-  int get_width();
-
-  int get_height();
-
 private:
   // Parameterization
   int width, height;
   // framebuffer object to render the texture into
-  GLuint texture_fbo;
-  // the texture  attached to the fbo
-  GLuint texture;
+  GLuint fbo;
+  // renderbuffer for renderng colors
+  GLuint color_rbo;
   // renderbuffer object for the depth testing
   GLuint depth_stencil_rbo;
 };

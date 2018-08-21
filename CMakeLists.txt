@@ -29,8 +29,8 @@ target_sources(scigl_render PRIVATE
   src/scene/mesh.cpp  
   src/scene/model.cpp
   src/shader/depth_shader.cpp
-  src/shader/single_texture_shader.cpp
-  src/shader/shader.cpp)
+  src/shader/shader.cpp
+  src/shader/single_texture_shader.cpp)
 target_include_directories(scigl_render PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
