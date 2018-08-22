@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <gl3w/GL/gl3w.h>
 #include <scigl_render/render/offscreen_render.hpp>
 #include <stdexcept>
@@ -60,9 +61,6 @@ void OffscreenRender::read_data(
 
 void OffscreenRender::swap_indices()
 {
-  int temp = pbo_fbo_index;
-  pbo_fbo_index = pbo_map_index;
-  pbo_map_index = temp;
+  std::swap(pbo_fbo_index, pbo_map_index);
 }
-
 } // namespace scigl_render
