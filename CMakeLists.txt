@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.12)
 project(scigl_render)
 
 # Default ROS2 configurations for compilation
@@ -10,6 +10,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+# prefer new ABI for OpenGL
+set(OpenGL_GL_PREFERENCE "GLVND")
 # find packages
 find_package(gl3w REQUIRED)
 find_package(PkgConfig REQUIRED)
@@ -36,7 +38,7 @@ target_include_directories(scigl_render PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 target_link_libraries(scigl_render 
-  PUBLIC gl3w glm ${GLFW_STATIC_LIBRARIES}
+  PUBLIC OpenGL::GL gl3w glm ${GLFW_STATIC_LIBRARIES}
   PRIVATE assimp)
 
 # example apps
