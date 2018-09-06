@@ -20,9 +20,9 @@ struct CameraIntrinsics
   /*! The height of the image in pixels*/
   int height = 480;
   /*! Focal length in x-direction */
-  float f_x;
+  float f_x = 384;
   /*! Focal length in y-direction */
-  float f_y;
+  float f_y = 384;
   /*! Principal point offset in x-direction */
   float c_x = 0;
   /*! Principal point offset in y-direction */
